@@ -3,6 +3,7 @@ package com.microserviceone.moviecatalogservice.resources;
 import com.microserviceone.moviecatalogservice.models.CatalogItem;
 import com.microserviceone.moviecatalogservice.models.Movie;
 import com.microserviceone.moviecatalogservice.models.Rating;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,10 +16,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
 
-  @RequestMapping("/{userId}")
-  public List<CatalogItem> getcatalog(@PathVariable("userId") String userId) {
+  @Autowired
+  private RestTemplate restTemplate;
 
-    RestTemplate restTemplate = new RestTemplate();
+  @RequestMapping("/{userId}")
+  public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
+
     List<Rating> ratings = List.of(
           new Rating("1234", 4),
           new Rating("5678", 5)
