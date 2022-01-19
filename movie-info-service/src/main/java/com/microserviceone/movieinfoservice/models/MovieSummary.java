@@ -1,4 +1,4 @@
-package com.microserviceone.moviecatalogservice.models;
+package com.microserviceone.movieinfoservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,10 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Movie {
-
-  private String movieId;
+public class MovieSummary {
+  private String id;
   private String title;
   private String overview;
 }
