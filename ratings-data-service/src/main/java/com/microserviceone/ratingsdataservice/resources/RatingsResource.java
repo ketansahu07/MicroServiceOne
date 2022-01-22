@@ -25,6 +25,7 @@ public class RatingsResource {
     );
 
     UserRating userRating = new UserRating();
+    userRating.setUserId(userId);
     userRating.setUserRatings(ratings);
 
     return userRating;

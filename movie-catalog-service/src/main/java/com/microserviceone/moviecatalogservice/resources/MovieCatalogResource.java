@@ -1,8 +1,9 @@
 package com.microserviceone.moviecatalogservice.resources;
 
 import com.microserviceone.moviecatalogservice.models.CatalogItem;
-import com.microserviceone.moviecatalogservice.models.Movie;
 import com.microserviceone.moviecatalogservice.models.UserRating;
+import com.microserviceone.moviecatalogservice.services.MovieInfoService;
+import com.microserviceone.moviecatalogservice.services.RatingDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,16 +23,18 @@ public class MovieCatalogResource {
 //  @Autowired
 //  private WebClient.Builder webClientBuilder;
 
+  @Autowired
+  private MovieInfoService movieInfoService;
+
+  @Autowired
+  private RatingDataService ratingDataService;
+
   @RequestMapping("/{userId}")
   public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
+    UserRating ratings = ratingDataService.getUserRating(userId);
 
-    UserRating ratings = restTemplate.getForObject("http://ratings-data-service/ratings/users/" + userId, UserRating.class);
-
-    return ratings.getUserRatings().stream().map(rating -> {
-      Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
-
-      return new CatalogItem(movie.getTitle(), movie.getOverview(), rating.getRating());
-    }).collect(Collectors.toList());
+    return ratings.getUserRatings().stream().map(rating -> movieInfoService.getCatalogItem(rating))
+          .collect(Collectors.toList());
   }
 }
 
