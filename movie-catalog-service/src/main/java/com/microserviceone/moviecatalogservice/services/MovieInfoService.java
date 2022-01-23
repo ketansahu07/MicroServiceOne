@@ -15,7 +15,19 @@ public class MovieInfoService {
   @Autowired
   private RestTemplate restTemplate;
 
-  @HystrixCommand(fallbackMethod = "getFallbackCatalogItem",
+  /*
+  // Bulkhead Pattern: defines separate thread pools for separate apis
+  @HystrixCommand(
+        fallbackMethod = "getFallbackCatalogItem",
+        threadPoolKey = "movieInfoPool",
+        threadPoolProperties = {
+              @HystrixProperty(name = "coreSize", value = "20"),  // number of threads in this pool
+              @HystrixProperty(name = "axQueueSize", value = "10")  // queue beyond max threads
+        }
+  )
+   */
+  @HystrixCommand(
+        fallbackMethod = "getFallbackCatalogItem",
         commandProperties = {
               @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
               @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),

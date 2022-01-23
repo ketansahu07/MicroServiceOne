@@ -16,6 +16,17 @@ public class RatingDataService {
   @Autowired
   private RestTemplate restTemplate;
 
+  /*
+  // Bulkhead Pattern: defines separate thread pools for separate apis
+  @HystrixCommand(
+        fallbackMethod = "getFallbackUserRating",
+        threadPoolKey = "ratingDataPool",
+        threadPoolProperties = {
+              @HystrixProperty(name = "coreSize", value = "20"),  // number of threads in this pool
+              @HystrixProperty(name = "axQueueSize", value = "10")  // queue beyond max threads
+        }
+  )
+   */
   @HystrixCommand(fallbackMethod = "getFallbackUserRating",
         commandProperties = {
               @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
